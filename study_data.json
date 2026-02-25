@@ -16,5 +16,10 @@
         "date": "2026-09-6",
         "duration": 5.0,
         "subject": "Matematika"
+    },
+    {
+        "date": "2025-02-02",
+        "duration": 2.0,
+        "subject": "Informatika"
     }
 ]

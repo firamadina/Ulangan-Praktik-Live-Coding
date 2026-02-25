@@ -95,13 +95,13 @@ def main():
     print("Semangat belajar dan capai tujuan Anda! 📚✨")
     print("\n" + "="*50)
     while True:
-        print("\n=== Study Tracker ===")
-        print("1. Input Waktu Belajar")
-        print("2. Lihat Konsistensi")
-        print("3. Rekomendasi Jadwal")
-        print("4. Saran Teknik Belajar")
-        print("5. Keluar")
-        choice = input("Pilih opsi: ")
+        print("\n\033[96m=== Study Tracker ===\033[0m")
+        print("\033[92m1. 📝 Input Waktu Belajar\033[0m")
+        print("\033[92m2. 📊 Lihat Konsistensi\033[0m")
+        print("\033[92m3. 📅 Rekomendasi Jadwal\033[0m")
+        print("\033[92m4. 💡 Saran Teknik Belajar\033[0m")
+        print("\033[92m5. 🚪 Keluar\033[0m")
+        choice = input("\033[93mPilih opsi: \033[0m")
         if choice == '1':
             input_study_time()
         elif choice == '2':
