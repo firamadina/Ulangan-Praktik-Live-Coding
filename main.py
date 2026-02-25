@@ -127,7 +127,7 @@ def main():
         print("\033[92m1. 📝 Input Waktu Belajar\033[0m")
         print("\033[92m2. 📊 Lihat Konsistensi\033[0m")
         print("\033[92m3. 📅 Rekomendasi Jadwal\033[0m")
-        print("\033[92m4. 💡 Saran Teknik Belajar\033[0m")
+        print("\033[92m4. 💡 Tips Belajar\033[0m")
         print("\033[92m5. 📋 List Mapel\033[0m")
         print("\033[92m6. 🕒 Input Jadwal Belajar\033[0m")
         print("\033[92m7. 👀 Lihat Jadwal Belajar\033[0m")
