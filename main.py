@@ -8,8 +8,13 @@ DATA_FILE = 'study_data.json'
 def load_data():
     if os.path.exists(DATA_FILE):
         with open(DATA_FILE, 'r') as f:
-            return json.load(f)
-    return []
+            data = json.load(f)
+            # Ensure structure
+            if isinstance(data, list):
+                # Migrate old data
+                return {'study_data': data, 'schedules': []}
+            return data
+    return {'study_data': [], 'schedules': []}
 
 def save_data(data):
     with open(DATA_FILE, 'w') as f:
@@ -27,35 +32,37 @@ def input_study_time():
     subject = input("Masukkan nama mapel: ")
     duration = float(input("Masukkan durasi belajar dalam jam: "))
     data = load_data()
-    data.append({'date': date_str, 'duration': duration, 'subject': subject})
+    data['study_data'].append({'date': date_str, 'duration': duration, 'subject': subject})
     save_data(data)
     print("Data belajar berhasil disimpan.")
 
 def calculate_consistency():
     data = load_data()
-    if not data:
+    study_data = data['study_data']
+    if not study_data:
         print("Belum ada data belajar.")
         return
-    total_days = len(set(entry['date'] for entry in data))
-    total_hours = sum(entry['duration'] for entry in data)
+    total_days = len(set(entry['date'] for entry in study_data))
+    total_hours = sum(entry['duration'] for entry in study_data)
     avg_hours_per_day = total_hours / total_days if total_days > 0 else 0
     print(f"Total hari belajar: {total_days}")
     print(f"Total jam belajar: {total_hours:.2f}")
     print(f"Rata-rata jam per hari: {avg_hours_per_day:.2f}")
     # Konsistensi: hitung hari dalam 7 hari terakhir
     last_week = datetime.now() - timedelta(days=7)
-    recent_data = [entry for entry in data if datetime.strptime(entry['date'], '%Y-%m-%d') >= last_week]
+    recent_data = [entry for entry in study_data if datetime.strptime(entry['date'], '%Y-%m-%d') >= last_week]
     recent_days = len(set(entry['date'] for entry in recent_data))
     print(f"Hari belajar dalam 7 hari terakhir: {recent_days}/7")
 
 def recommend_schedule():
     data = load_data()
-    if not data:
+    study_data = data['study_data']
+    if not study_data:
         print("Belum ada data untuk rekomendasi.")
         return
     # Hitung pola waktu belajar
     day_counts = defaultdict(float)
-    for entry in data:
+    for entry in study_data:
         day = datetime.strptime(entry['date'], '%Y-%m-%d').strftime('%A')
         day_counts[day] += entry['duration']
     if day_counts:
@@ -79,13 +86,34 @@ def study_tips():
 
 def list_subjects():
     data = load_data()
-    subjects = set(entry.get('subject', 'Unknown') for entry in data)
+    study_data = data['study_data']
+    subjects = set(entry.get('subject', 'Unknown') for entry in study_data)
     if subjects:
         print("Mapel yang telah dipelajari:")
         for subj in sorted(subjects):
             print(f"- {subj}")
     else:
         print("Belum ada mapel yang dicatat.")
+
+def input_schedule():
+    day = input("Masukkan hari (e.g., Monday): ")
+    start_time = input("Masukkan waktu mulai (HH:MM): ")
+    end_time = input("Masukkan waktu selesai (HH:MM): ")
+    subject = input("Masukkan nama mapel: ")
+    data = load_data()
+    data['schedules'].append({'day': day, 'start_time': start_time, 'end_time': end_time, 'subject': subject})
+    save_data(data)
+    print("Jadwal belajar berhasil disimpan.")
+
+def view_schedule():
+    data = load_data()
+    schedules = data['schedules']
+    if not schedules:
+        print("Belum ada jadwal belajar yang dicatat.")
+        return
+    print("Jadwal Belajar Anda:")
+    for sched in schedules:
+        print(f"- {sched['day']}: {sched['start_time']} - {sched['end_time']} ({sched['subject']})")
 
 def main():
     print("🌟 Selamat Datang di Study Tracker! 🌟")
@@ -99,8 +127,11 @@ def main():
         print("\033[92m1. 📝 Input Waktu Belajar\033[0m")
         print("\033[92m2. 📊 Lihat Konsistensi\033[0m")
         print("\033[92m3. 📅 Rekomendasi Jadwal\033[0m")
-        print("\033[92m4. 💡 Tips Belajar\033[0m")
-        print("\033[92m5. 🚪 Keluar\033[0m")
+        print("\033[92m4. 💡 Saran Teknik Belajar\033[0m")
+        print("\033[92m5. 📋 List Mapel\033[0m")
+        print("\033[92m6. 🕒 Input Jadwal Belajar\033[0m")
+        print("\033[92m7. 👀 Lihat Jadwal Belajar\033[0m")
+        print("\033[92m8. 🚪 Keluar\033[0m")
         choice = input("\033[93mPilih opsi: \033[0m")
         if choice == '1':
             input_study_time()
@@ -111,6 +142,12 @@ def main():
         elif choice == '4':
             study_tips()
         elif choice == '5':
+            list_subjects()
+        elif choice == '6':
+            input_schedule()
+        elif choice == '7':
+            view_schedule()
+        elif choice == '8':
             break
         else:
             print("Pilihan tidak valid.")
