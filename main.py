@@ -112,8 +112,50 @@ def view_schedule():
         print("Belum ada jadwal belajar yang dicatat.")
         return
     print("Jadwal Belajar Anda:")
-    for sched in schedules:
-        print(f"- {sched['day']}: {sched['start_time']} - {sched['end_time']} ({sched['subject']})")
+    for i, sched in enumerate(schedules, 1):
+        print(f"{i}. {sched['day']}: {sched['start_time']} - {sched['end_time']} ({sched['subject']})")
+
+def edit_schedule():
+    data = load_data()
+    schedules = data['schedules']
+    if not schedules:
+        print("Belum ada jadwal belajar untuk diedit.")
+        return
+    view_schedule()  # Tampilkan list
+    try:
+        idx = int(input("Pilih nomor jadwal yang ingin diedit: ")) - 1
+        if 0 <= idx < len(schedules):
+            sched = schedules[idx]
+            print(f"Mengedit: {sched['day']}: {sched['start_time']} - {sched['end_time']} ({sched['subject']})")
+            day = input(f"Hari ({sched['day']}): ") or sched['day']
+            start_time = input(f"Waktu mulai ({sched['start_time']}): ") or sched['start_time']
+            end_time = input(f"Waktu selesai ({sched['end_time']}): ") or sched['end_time']
+            subject = input(f"Mapel ({sched['subject']}): ") or sched['subject']
+            schedules[idx] = {'day': day, 'start_time': start_time, 'end_time': end_time, 'subject': subject}
+            save_data(data)
+            print("Jadwal berhasil diedit.")
+        else:
+            print("Nomor tidak valid.")
+    except ValueError:
+        print("Input tidak valid.")
+
+def delete_schedule():
+    data = load_data()
+    schedules = data['schedules']
+    if not schedules:
+        print("Belum ada jadwal belajar untuk dihapus.")
+        return
+    view_schedule()  # Tampilkan list
+    try:
+        idx = int(input("Pilih nomor jadwal yang ingin dihapus: ")) - 1
+        if 0 <= idx < len(schedules):
+            deleted = schedules.pop(idx)
+            save_data(data)
+            print(f"Jadwal {deleted['day']}: {deleted['start_time']} - {deleted['end_time']} ({deleted['subject']}) berhasil dihapus.")
+        else:
+            print("Nomor tidak valid.")
+    except ValueError:
+        print("Input tidak valid.")
 
 def main():
     print("🌟 Selamat Datang di Study Tracker! 🌟")
@@ -131,7 +173,9 @@ def main():
         print("\033[92m5. 📋 List Mapel\033[0m")
         print("\033[92m6. 🕒 Input Jadwal Belajar\033[0m")
         print("\033[92m7. 👀 Lihat Jadwal Belajar\033[0m")
-        print("\033[92m8. 🚪 Keluar\033[0m")
+        print("\033[92m8. ✏️ Edit Jadwal Belajar\033[0m")
+        print("\033[92m9. 🗑️ Hapus Jadwal Belajar\033[0m")
+        print("\033[92m10. 🚪 Keluar\033[0m")
         choice = input("\033[93mPilih opsi: \033[0m")
         if choice == '1':
             input_study_time()
@@ -148,6 +192,10 @@ def main():
         elif choice == '7':
             view_schedule()
         elif choice == '8':
+            edit_schedule()
+        elif choice == '9':
+            delete_schedule()
+        elif choice == '10':
             break
         else:
             print("Pilihan tidak valid.")
