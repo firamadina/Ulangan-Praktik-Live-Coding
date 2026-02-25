@@ -99,7 +99,7 @@ def main():
         print("\033[92m1. 📝 Input Waktu Belajar\033[0m")
         print("\033[92m2. 📊 Lihat Konsistensi\033[0m")
         print("\033[92m3. 📅 Rekomendasi Jadwal\033[0m")
-        print("\033[92m4. 💡 Saran Teknik Belajar\033[0m")
+        print("\033[92m4. 💡 Tips Belajar\033[0m")
         print("\033[92m5. 🚪 Keluar\033[0m")
         choice = input("\033[93mPilih opsi: \033[0m")
         if choice == '1':
