@@ -88,14 +88,19 @@ def list_subjects():
         print("Belum ada mapel yang dicatat.")
 
 def main():
+    print("🌟 Selamat Datang di Study Tracker! 🌟")
+    print("Mari kita jadikan belajar sebagai kebiasaan yang menyenangkan dan produktif!")
+    print("Dengan aplikasi ini, Anda dapat melacak waktu belajar, melihat konsistensi,")
+    print("mendapatkan rekomendasi jadwal, dan tips belajar yang berguna.")
+    print("Semangat belajar dan capai tujuan Anda! 📚✨")
+    print("\n" + "="*50)
     while True:
         print("\n=== Study Tracker ===")
         print("1. Input Waktu Belajar")
         print("2. Lihat Konsistensi")
         print("3. Rekomendasi Jadwal")
         print("4. Saran Teknik Belajar")
-        print("5. Lihat Mapel")
-        print("6. Keluar")
+        print("5. Keluar")
         choice = input("Pilih opsi: ")
         if choice == '1':
             input_study_time()
@@ -106,8 +111,6 @@ def main():
         elif choice == '4':
             study_tips()
         elif choice == '5':
-            list_subjects()
-        elif choice == '6':
             break
         else:
             print("Pilihan tidak valid.")
